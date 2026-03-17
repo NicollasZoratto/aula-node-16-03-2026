@@ -1,29 +1,14 @@
-import express, {Request, Response} from "express";
+import express from "express";
+import router from "./routes/tarefas";
+
 
 const app = express();
 const PORT = 3000;
 
 app.use(express.json());
 
-app.get("/", (req: Request, rest: Response) => {
-    rest.send("Olá express!!!");
-});
-
-app.get("/saudacao/:nome", (req: Request, res: Response)=> {
-    const nome  = req.params.nome;
-    res.json({
-        mensagem: `Olá ${nome}!`
-    })
-})
-
-app.post("/saudacao", (req: Request, res: Response) => {
-    const {nome} = req.body;
-
-    res.json({
-        mensagem: `Olá ${nome}`
-    })
-})
+app.use("/tarefas" ,router);
 
 app.listen(PORT, () => {
-    console.log("Servidor executado em localhost");
-})
+    console.log(`Servidor executado em localhost: ${PORT}`);
+});

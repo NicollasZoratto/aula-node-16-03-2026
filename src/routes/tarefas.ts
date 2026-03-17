@@ -1,26 +1,18 @@
-import express, {Request, Response} from "express";
+import {Router, Request, Response} from "express";
+import { Tarefa } from "../models/tarefa";
 
-const app = express();
-const PORT = 3000;
-
-app.use(express.json());
-
-type Tarefa ={
-    id: number,
-    titulo: string,
-    concluida: boolean
-}
+const router = Router();
 
 let tarefas: Tarefa[] = [
     {id:1, titulo: "Estudar Express", concluida:false},
     {id:2, titulo: "Estudar para a prova", concluida:false}
 ]
 
-app.get("/tarefas", (req: Request, rest: Response) => {
+router.get("/tarefas", (req: Request, rest: Response) => {
     rest.send(tarefas);
 });
 
-app.get("/tarefas/:id", (req: Request, rest: Response) => {
+router.get("/:id", (req: Request, rest: Response) => {
     const id = Number(req.params.id)
 
     const tarefa = tarefas.find(t => t.id == id);
@@ -32,7 +24,7 @@ app.get("/tarefas/:id", (req: Request, rest: Response) => {
     rest.json(tarefa);
 });
 
-app.post("/tarefas", (req: Request, res: Response) => {
+ router.post("/tarefas", (req: Request, res: Response) => {
     const {titulo} = req.body;
     const novaTarefa: Tarefa = {
 
@@ -45,7 +37,7 @@ app.post("/tarefas", (req: Request, res: Response) => {
     
 })
 
-app.put("/tarefas/:id", (req: Request, res: Response) => {
+router.put("/tarefas/:id", (req: Request, res: Response) => {
     const id = Number(req.params.id)
 
     const tarefa = tarefas.find(t => t.id == id);
@@ -60,7 +52,7 @@ app.put("/tarefas/:id", (req: Request, res: Response) => {
 
     res.json(tarefa);
 });
-app.delete("/tarefas/:id", (req: Request, res: Response) => {
+router.delete("/tarefas/:id", (req: Request, res: Response) => {
     const id = Number(req.params.id);
 
     // Verifica se a tarefa existe antes de tentar deletar
@@ -77,6 +69,4 @@ app.delete("/tarefas/:id", (req: Request, res: Response) => {
     res.status(204).send();
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor executado em localhost: ${PORT}`);
-})
+export default router;
